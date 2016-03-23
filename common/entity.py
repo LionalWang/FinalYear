@@ -43,7 +43,7 @@ class Student(Base):
 
 class Lecture(Base):
 
-    __tablename__ = 'class'
+    __tablename__ = 'lecture'
     id = Column(BigInteger, primary_key=True)
     lecturename = Column(Text)
     tid = Column(BigInteger)
@@ -54,7 +54,7 @@ class Knowledge(Base):
 
     __tablename__ = 'knowledge'
     id = Column(BigInteger, primary_key=True)
-    cid = Column(BigInteger)
+    lid = Column(BigInteger)
     text = Column(Text)
     yes_count = Column(BigInteger)
     no_count = Column(BigInteger)

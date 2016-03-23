@@ -40,23 +40,38 @@ db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=_engine))
 
-@app.route('/addknowledge')
-def add_knowledge():
+
+'''
+@app.route('/addknowledge', methods=['POST'])
+def enter_lecture():
+    print "choose lecture success"
     if not session.get('logged_in'):
         abort(401)
+    lecturename = request.form['lecture']
+    print "lecturename = %s" % lecturename
+    sql = "select id from lecture where lecturename = '%s'" % lecturename
+    results = _query(_engine, sql)
+    lecture = results.fetchone()
+    if lecture:
+        session['lid'] = lecture[0]
+        print "~~~~~~~~~~~enter a lecture~~~~~~~~~~~~:::::%s" % session
+        return redirect(url_for('show_lecture_details'))
+    return render_template('show_lecture.html',)
 
-    from common.entity import Knowledge,Lecture
 
-
+@app.route('/lecture/<lecturename>')
+def show_lecture_details():
+    print 'success'
+'''
 
 
 @app.route('/list')
-def show_entries():
+def show_lecture():
     from common.entity import Lecture
     tid = session.get('tid', 0)
     rows = db_session.query(Lecture).filter_by(tid=tid).all()
     lectures = [dict(lecturename=row.lecturename, time=row.time) for row in rows]
-    return render_template('show_entries.html', lectures=lectures)
+    return render_template('show_lecture.html', lectures=lectures)
 
 
 @app.route('/addlecture', methods=['POST'])
@@ -69,7 +84,7 @@ def add_lecture():
     db_session.add(lecture)
     db_session.commit()
     flash('New entry was successfully posted')
-    return redirect(url_for('show_entries'))
+    return redirect(url_for('show_lecture'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -86,7 +101,7 @@ def login():
             session['tid'] = teacher[0]
             print "after login: %s" % session
             flash('You were logged in')
-            return redirect(url_for('show_entries'))
+            return redirect(url_for('show_lecture'))
         else:
             error = "Invalid teachername or password"
 
@@ -110,15 +125,12 @@ def logout():
     session.pop('logged_in', None)
     session.pop('uid', None)
     flash('You were logged out')
-    return redirect(url_for('show_entries'))
+    return redirect(url_for('show_lecture'))
 
 
-'''
 @app.route('/')
 def hello():
-    return 'hello world!'
-
-'''
+    return 'Please visit /login'
 
 
 if __name__ == '__main__':

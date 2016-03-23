@@ -3,7 +3,7 @@
   {% if session.logged_in %}
     <form action="{{ url_for('add_lecture') }}" method=post class=add-entry>
       <dl>
-        <dt>Class name:
+        <dt>Lecture name:
         <dd><input type=text size=30 name=lecturename>
         <dt>Time:
         <dd><input type=datetime name=time>
@@ -13,9 +13,9 @@
   {% endif %}
   <ul class=lectures>
   {% for lecture in lectures %}
-    <li><h2>{{ lecture.lecturename }}</h2>{{ lecture.time }}
+      <li><h2>{{ lecture.lecturename }}</h2>{{ lecture.time }}
   {% else %}
-    <li><em>Unbelievable.  No classes here so far</em>
+    <li><em>Unbelievable.  No lectures here so far</em>
   {% endfor %}
   </ul>
 {% endblock %}
