@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #coding=utf-8
 
-from flask import Flask, render_template, request, session, redirect, url_for, abort, flash
+from flask import Flask, render_template, request, session, redirect, url_for, abort, flash, jsonify
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -72,6 +72,7 @@ def show_lecture():
     rows = db_session.query(Lecture).filter_by(tid=tid).all()
     lectures = [dict(lecturename=row.lecturename, time=row.time) for row in rows]
     return render_template('show_lecture.html', lectures=lectures)
+#    return jsonify(lectures)
 
 
 @app.route('/addlecture', methods=['POST'])
@@ -131,6 +132,50 @@ def logout():
 @app.route('/')
 def hello():
     return 'Please visit /login'
+
+
+'''
+
+
+This part is interface
+
+
+'''
+
+
+@app.route('/login/teacher/<teachername>/<password>', methods=['GET'])
+def teacherlogin(teachername, password):
+    sql = "select id from teacher where teachername = '%s' and password = '%s'" % (teachername, password)
+    results = _query(_engine, sql)
+    teacher = results.fetchone()  # tuple return
+    if teacher:
+        result = [
+            {
+                'status': 1,
+                'tid': teacher[0]
+            }
+        ]
+    else:
+        result = [
+            {
+                'status': 0,
+                'tid': 0
+            }
+        ]
+    return jsonify({'result': result})
+
+
+@app.route('/lecture/<tid>', methods=['GET'])
+def checklecture(tid):
+    from common.entity import Lecture
+    rows = db_session.query(Lecture).filter_by(tid=tid).all()
+    result = []
+    for row in rows:
+        lecture = {'id': row.id,
+                   'lecturename': row.lecturename,
+                   'time': row.time}
+        result.append(lecture)
+    return jsonify({'result': result})
 
 
 if __name__ == '__main__':
