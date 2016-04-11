@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if session.logged_in %}
+    <h1>{{ lecture }}</h1>
+    <form action="{{ url_for('add_knowledge') }}" method=post class=add-entry>
+      <dl>
+        <dt>Knowledge name:
+        <dt><input type=text size=30 name=knowledgename>
+        <dt><input type=submit value=Add>
+      </dl>
+    </form>
+  {% endif %}
+  <ul class=knowledges>
+  {% for knowledge in knowledges %}
+      <li><h2>{{ knowledge.kname }}</h2>yes_count:{{ knowledge.yes_count }}  no_count:{{ knowledge.no_count }}
+  {% else %}
+    <li><em>Unbelievable.  No knowledges here so far</em>
+  {% endfor %}
+  </ul>
+{% endblock %}

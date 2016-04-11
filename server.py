@@ -41,28 +41,23 @@ db_session = scoped_session(sessionmaker(autocommit=False,
                                          bind=_engine))
 
 
-'''
+@app.route('/knowledge/<id>/<lecturename>', methods=['GET'])
+def show_knowledge(id, lecturename):
+    from common.entity import Knowledge
+    session['lid'] = id
+    session['lname'] = lecturename
+    rows = db_session.query(Knowledge).filter_by(lid=id).all()
+    knowledges = [dict(kid=row.id, kname=row.text, yes_count=row.yes_count, no_count=row.no_count) for row in rows]
+    return render_template('add_knowledge.html', lecture=lecturename, knowledges=knowledges)
+
+
 @app.route('/addknowledge', methods=['POST'])
-def enter_lecture():
-    print "choose lecture success"
-    if not session.get('logged_in'):
-        abort(401)
-    lecturename = request.form['lecture']
-    print "lecturename = %s" % lecturename
-    sql = "select id from lecture where lecturename = '%s'" % lecturename
-    results = _query(_engine, sql)
-    lecture = results.fetchone()
-    if lecture:
-        session['lid'] = lecture[0]
-        print "~~~~~~~~~~~enter a lecture~~~~~~~~~~~~:::::%s" % session
-        return redirect(url_for('show_lecture_details'))
-    return render_template('show_lecture.html',)
-
-
-@app.route('/lecture/<lecturename>')
-def show_lecture_details():
-    print 'success'
-'''
+def add_knowledge():
+    from common.entity import Knowledge
+    knowledge = Knowledge(lid=session['lid'], text=request.form['knowledgename'], yes_count=0, no_count=0)
+    db_session.add(knowledge)
+    db_session.commit()
+    return redirect(url_for('show_knowledge', id=session['lid'], lecturename=session['lname']))
 
 
 @app.route('/list')
@@ -70,9 +65,8 @@ def show_lecture():
     from common.entity import Lecture
     tid = session.get('tid', 0)
     rows = db_session.query(Lecture).filter_by(tid=tid).all()
-    lectures = [dict(lecturename=row.lecturename, time=row.time) for row in rows]
+    lectures = [dict(id=row.id, lecturename=row.lecturename, time=row.time) for row in rows]
     return render_template('show_lecture.html', lectures=lectures)
-#    return jsonify(lectures)
 
 
 @app.route('/addlecture', methods=['POST'])
