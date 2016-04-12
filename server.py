@@ -298,5 +298,43 @@ def student_choose():
     return jsonify({'result': result})
 
 
+@app.route('/api/student/commit/<kid>/<understand>', methods=['GET'])
+def student_commit(kid, understand):
+    from common.entity import Knowledge
+    rows = db_session.query(Knowledge).filter_by(id=kid).all()
+    print kid + "        " + understand
+
+    result = []
+
+    for row in rows:
+        if understand:
+            row.yes_count=row.yes_count+1
+            db_session.commit()
+            status = {'status': 1}
+            result.append(status)
+        else:
+            row.no_count = row.no_count+1
+            db_session.commit()
+            status = {'status': 0}
+            result.append(status)
+
+    return jsonify({'result': result})
+
+
+'''
+    if (understand == 1):
+        for row in rows:
+            row.yes_count=row.yes_count+1
+            db_session.commit()
+            result = {'status': 1}
+    elif (understand == 0):
+        for row in rows:
+            row.no_count=row.no_count+1
+            db_session.commit()
+            result = {'status': 1}
+
+'''
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
