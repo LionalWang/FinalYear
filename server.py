@@ -307,7 +307,7 @@ def student_commit(kid, understand):
     result = []
 
     for row in rows:
-        if understand:
+        if understand == "true":
             row.yes_count=row.yes_count+1
             db_session.commit()
             status = {'status': 1}
@@ -319,21 +319,6 @@ def student_commit(kid, understand):
             result.append(status)
 
     return jsonify({'result': result})
-
-
-'''
-    if (understand == 1):
-        for row in rows:
-            row.yes_count=row.yes_count+1
-            db_session.commit()
-            result = {'status': 1}
-    elif (understand == 0):
-        for row in rows:
-            row.no_count=row.no_count+1
-            db_session.commit()
-            result = {'status': 1}
-
-'''
 
 
 if __name__ == '__main__':
