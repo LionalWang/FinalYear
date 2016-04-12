@@ -1,28 +1,11 @@
 __author__ = 'hezhiyu'
 
-from sqlalchemy import BigInteger, Text, DateTime
+from sqlalchemy import BigInteger, Text, DateTime, TIMESTAMP, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column
 
 Base = declarative_base()
 
-'''
-class User(Base):
-
-    __tablename__ = 'user'
-    id = Column(BigInteger, primary_key=True)
-    username = Column(Text)
-    password = Column(Text)
-
-
-class Entry(Base):
-
-    __tablename__ = 'entries'
-    id = Column(BigInteger, primary_key=True)
-    uid = Column(BigInteger)
-    title = Column(Text)
-    text = Column(Text)
-'''
 
 
 class Teacher(Base):
@@ -47,7 +30,7 @@ class Lecture(Base):
     id = Column(BigInteger, primary_key=True)
     lecturename = Column(Text)
     tid = Column(BigInteger)
-    time = Column(DateTime)
+    time = Column(TIMESTAMP)
 
 
 class Knowledge(Base):
@@ -58,3 +41,4 @@ class Knowledge(Base):
     text = Column(Text)
     yes_count = Column(BigInteger)
     no_count = Column(BigInteger)
+    is_send = Column(Boolean)

@@ -41,6 +41,24 @@ db_session = scoped_session(sessionmaker(autocommit=False,
                                          bind=_engine))
 
 
+@app.route('/student', methods=['GET'])
+def show_student():
+    from common.entity import Student
+    rows = db_session.query(Student).all()
+    students = [dict(student_number=row.studentname) for row in rows]
+    return render_template('show_student.html', students=students)
+
+
+@app.route('/addstudent', methods=['POST'])
+def add_student():
+    from common.entity import Student
+    print request.form['student_number']
+    student = Student(studentname=request.form['student_number'], password=request.form['student_number'])
+    db_session.add(student)
+    db_session.commit()
+    return redirect(url_for('show_student'))
+
+
 @app.route('/knowledge/<id>/<lecturename>', methods=['GET'])
 def show_knowledge(id, lecturename):
     from common.entity import Knowledge
@@ -54,7 +72,7 @@ def show_knowledge(id, lecturename):
 @app.route('/addknowledge', methods=['POST'])
 def add_knowledge():
     from common.entity import Knowledge
-    knowledge = Knowledge(lid=session['lid'], text=request.form['knowledgename'], yes_count=0, no_count=0)
+    knowledge = Knowledge(lid=session['lid'], text=request.form['knowledgename'], yes_count=0, no_count=0, is_send=0)
     db_session.add(knowledge)
     db_session.commit()
     return redirect(url_for('show_knowledge', id=session['lid'], lecturename=session['lname']))
@@ -137,7 +155,7 @@ This part is interface
 '''
 
 
-@app.route('/login/teacher/<teachername>/<password>', methods=['GET'])
+@app.route('/api/login/teacher/<teachername>/<password>', methods=['GET'])
 def teacherlogin(teachername, password):
     sql = "select id from teacher where teachername = '%s' and password = '%s'" % (teachername, password)
     results = _query(_engine, sql)
@@ -159,7 +177,7 @@ def teacherlogin(teachername, password):
     return jsonify({'result': result})
 
 
-@app.route('/lecture/<tid>', methods=['GET'])
+@app.route('/api/lecture/<tid>', methods=['GET'])
 def checklecture(tid):
     from common.entity import Lecture
     rows = db_session.query(Lecture).filter_by(tid=tid).all()
@@ -169,6 +187,114 @@ def checklecture(tid):
                    'lecturename': row.lecturename,
                    'time': row.time}
         result.append(lecture)
+    return jsonify({'result': result})
+
+
+@app.route('/api/knowledge/<lid>', methods=['GET'])
+def checkknowledge(lid):
+    from common.entity import Knowledge
+    rows = db_session.query(Knowledge).filter_by(lid=lid).all()
+    result = []
+    for row in rows:
+        knowledge = {'id': row.id,
+                     'text': row.text,
+                     'yes_count': row.yes_count,
+                     'no_count': row.no_count}
+        result.append(knowledge)
+    return jsonify({'result': result})
+
+
+@app.route('/api/kdetail/<kid>', methods=['GET'])
+def checkknowledgedetail(kid):
+    from common.entity import Knowledge
+    rows = db_session.query(Knowledge).filter_by(id=kid).all()
+    result = []
+    for row in rows:
+        knowledge = {'id': row.id,
+                     'text': row.text,
+                     'yes_count': row.yes_count,
+                     'no_count': row.no_count,
+                     'is_send': row.is_send}
+        result.append(knowledge)
+    return jsonify({'result': result})
+
+
+@app.route('/api/knowledge/update/<kid>', methods=['GET'])
+def knowledge_update(kid):
+    from common.entity import Knowledge
+    rows = db_session.query(Knowledge).filter_by(id=kid).all()
+    result = []
+    for row in rows:
+
+        if row.is_send == 1:
+            row.is_send = 0
+            db_session.commit()
+            knowledge = {'id': row.id,
+                         'text': row.text,
+                         'yes_count': row.yes_count,
+                         'no_count': row.no_count,
+                         'is_send': row.is_send}
+            result.append(knowledge)
+        else:
+            row.is_send = 1
+            db_session.commit()
+            knowledge = {'id': row.id,
+                         'text': row.text,
+                         'yes_count': row.yes_count,
+                         'no_count': row.no_count,
+                         'is_send': row.is_send}
+            result.append(knowledge)
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/knowledge/end/<kid>', methods=['GET'])
+def knowledge_end(kid):
+    from common.entity import Knowledge
+    rows = db_session.query(Knowledge).filter_by(id=kid).all()
+    result = []
+    for row in rows:
+        row.is_send = 0
+        db_session.commit()
+        knowledge = {'status': 1}
+        result.append(knowledge)
+    return jsonify({'result': result})
+
+
+@app.route('/api/login/student/<studentname>/<password>', methods=['GET'])
+def studentlogin(studentname, password):
+    sql = "select id from student where studentname = '%s' and password = '%s'" % (studentname, password)
+    results = _query(_engine, sql)
+    student = results.fetchone()  # tuple return
+    if student:
+        result = [
+            {
+                'status': 1,
+                'sid': student[0]
+            }
+        ]
+    else:
+        result = [
+            {
+                'status': 0,
+                'sid': 0
+            }
+        ]
+    return jsonify({'result': result})
+
+
+@app.route('/api/student/choose/check', methods=['GET'])
+def student_choose():
+    from common.entity import Knowledge
+    rows = db_session.query(Knowledge).filter_by(is_send=1).all()
+    result = []
+    for row in rows:
+        knowledge = {'id': row.id,
+                     'text': row.text,
+                     'yes_count': row.yes_count,
+                     'no_count': row.no_count,
+                     'is_send': row.is_send}
+        result.append(knowledge)
     return jsonify({'result': result})
 
 
