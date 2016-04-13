@@ -21,10 +21,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="server.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="server.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.63310343">
+            <state vertical-scroll-proportion="0.0">
               <caret line="317" column="34" selection-start-line="317" selection-start-column="34" selection-end-line="317" selection-end-column="34" />
               <folding>
                 <element signature="e#33#133#0" expanded="true" />
@@ -65,11 +65,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="add_knowledge.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="add_knowledge.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/add_knowledge.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.107143">
-              <caret line="9" column="59" selection-start-line="9" selection-start-column="59" selection-end-line="9" selection-end-column="59" />
+            <state vertical-scroll-proportion="0.24533716">
+              <caret line="9" column="38" selection-start-line="9" selection-start-column="38" selection-end-line="9" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -123,11 +123,11 @@
         <option value="$PROJECT_DIR$/templates/show_entries.html" />
         <option value="$PROJECT_DIR$/api.py" />
         <option value="$PROJECT_DIR$/templates/layout.html" />
-        <option value="$PROJECT_DIR$/templates/add_knowledge.html" />
         <option value="$PROJECT_DIR$/templates/show_students.html" />
         <option value="$PROJECT_DIR$/common/entity.py" />
         <option value="$PROJECT_DIR$/server.py" />
         <option value="$PROJECT_DIR$/templates/show_lecture.html" />
+        <option value="$PROJECT_DIR$/templates/add_knowledge.html" />
       </list>
     </option>
   </component>
@@ -635,14 +635,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/add_knowledge.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.107143">
-          <caret line="9" column="59" selection-start-line="9" selection-start-column="59" selection-end-line="9" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/layout.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-5.428571">
@@ -685,11 +677,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.63310343">
+        <state vertical-scroll-proportion="0.0">
           <caret line="317" column="34" selection-start-line="317" selection-start-column="34" selection-end-line="317" selection-end-column="34" />
           <folding>
             <element signature="e#33#133#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/add_knowledge.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.24533716">
+          <caret line="9" column="38" selection-start-line="9" selection-start-column="38" selection-end-line="9" selection-end-column="38" />
+          <folding />
         </state>
       </provider>
     </entry>
