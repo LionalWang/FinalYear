@@ -344,10 +344,10 @@ def knowledge_end(kid):
     return jsonify({'result': result})
 
 
-@app.route('/api/question/end/<id>', methods=['GET'])
-def question_end(id):
+@app.route('/api/question/end/<lid>', methods=['GET'])
+def question_end(lid):
     from common.entity import Question
-    rows = db_session.query(Question).filter_by(id=id).all()
+    rows = db_session.query(Question).filter_by(lid=lid).all()
     result = []
     for row in rows:
         row.is_send = 0
