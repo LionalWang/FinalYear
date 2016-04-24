@@ -59,6 +59,29 @@ def add_student():
     return redirect(url_for('show_student'))
 
 
+@app.route('/question/<id>/<lecturename>', methods=['GET'])
+def show_question(id, lecturename):
+    from common.entity import Question
+    session['lid'] = id
+    session['lname'] = lecturename
+    rows = db_session.query(Question).filter_by(lid=id).all()
+    questions = [dict(qid=row.id, qtext=row.body, ans1=row.ans1, ans1_count=row.ans1_count, ans2=row.ans2,
+                      ans2_count=row.ans2_count, ans3=row.ans3, ans3_count=row.ans3_count, ans4=row.ans4,
+                      ans4_count=row.ans4_count) for row in rows]
+    return render_template('add_question.html', lecture=lecturename, questions=questions)
+
+
+@app.route('/addquestion', methods=['POST'])
+def add_question():
+    from common.entity import Question
+    question = Question(lid=session['lid'], body=request.form['question'], ans1=request.form['choose1'],
+                        ans2=request.form['choose2'], ans3=request.form['choose3'], ans4=request.form['choose4'],
+                        ans1_count=0, ans2_count=0, ans3_count=0, ans4_count=0, is_send=0)
+    db_session.add(question)
+    db_session.commit()
+    return redirect(url_for('show_question', id=session['lid'], lecturename=session['lname']))
+
+
 @app.route('/knowledge/<id>/<lecturename>', methods=['GET'])
 def show_knowledge(id, lecturename):
     from common.entity import Knowledge
@@ -219,6 +242,27 @@ def checkknowledgedetail(kid):
     return jsonify({'result': result})
 
 
+@app.route('/api/qdetail/<lid>', methods=['GET'])
+def checkquestiondetail(lid):
+    from common.entity import Question
+    rows = db_session.query(Question).filter_by(lid=lid).all()
+    result = []
+    for row in rows:
+        question = {'id': row.id,
+                    'body': row.body,
+                    'ans1': row.ans1,
+                    'ans1_count': row.ans1_count,
+                    'ans2': row.ans2,
+                    'ans2_count': row.ans2_count,
+                    'ans3': row.ans3,
+                    'ans3_count': row.ans3_count,
+                    'ans4': row.ans4,
+                    'ans4_count': row.ans4_count,
+                    'is_send': row.is_send}
+        result.append(question)
+    return jsonify({'result': result})
+
+
 @app.route('/api/knowledge/update/<kid>', methods=['GET'])
 def knowledge_update(kid):
     from common.entity import Knowledge
@@ -248,6 +292,45 @@ def knowledge_update(kid):
     return jsonify({'result': result})
 
 
+@app.route('/api/question/update/<lid>', methods=['GET'])
+def question_update(lid):
+    from common.entity import Question
+    rows = db_session.query(Question).filter_by(lid=lid).all()
+    result = []
+    for row in rows:
+        if row.is_send == 1:
+            row.is_send = 0
+            db_session.commit()
+            question = {'id': row.id,
+                        'body': row.body,
+                        'ans1': row.ans1,
+                        'ans1_count': row.ans1_count,
+                        'ans2': row.ans2,
+                        'ans2_count': row.ans2_count,
+                        'ans3': row.ans3,
+                        'ans3_count': row.ans3_count,
+                        'ans4': row.ans4,
+                        'ans4_count': row.ans4_count,
+                        'is_send': row.is_send}
+            result.append(question)
+        else:
+            row.is_send = 1
+            db_session.commit()
+            question = {'id': row.id,
+                        'body': row.body,
+                        'ans1': row.ans1,
+                        'ans1_count': row.ans1_count,
+                        'ans2': row.ans2,
+                        'ans2_count': row.ans2_count,
+                        'ans3': row.ans3,
+                        'ans3_count': row.ans3_count,
+                        'ans4': row.ans4,
+                        'ans4_count': row.ans4_count,
+                        'is_send': row.is_send}
+            result.append(question)
+    return jsonify({'result': result})
+
+
 @app.route('/api/knowledge/end/<kid>', methods=['GET'])
 def knowledge_end(kid):
     from common.entity import Knowledge
@@ -258,6 +341,19 @@ def knowledge_end(kid):
         db_session.commit()
         knowledge = {'status': 1}
         result.append(knowledge)
+    return jsonify({'result': result})
+
+
+@app.route('/api/question/end/<lid>', methods=['GET'])
+def question_end(lid):
+    from common.entity import Question
+    rows = db_session.query(Question).filter_by(lid=lid).all()
+    result = []
+    for row in rows:
+        row.is_send = 0
+        db_session.commit()
+        question = {'status': 1}
+        result.append(question)
     return jsonify({'result': result})
 
 
@@ -298,6 +394,27 @@ def student_choose():
     return jsonify({'result': result})
 
 
+@app.route('/api/student/check/question', methods=['GET'])
+def student_question():
+    from common.entity import Question
+    rows = db_session.query(Question).filter_by(is_send=1).all()
+    result = []
+    for row in rows:
+        question = {'id': row.id,
+                    'body': row.body,
+                    'ans1': row.ans1,
+                    'ans1_count': row.ans1_count,
+                    'ans2': row.ans2,
+                    'ans2_count': row.ans2_count,
+                    'ans3': row.ans3,
+                    'ans3_count': row.ans3_count,
+                    'ans4': row.ans4,
+                    'ans4_count': row.ans4_count,
+                    'is_send': row.is_send}
+        result.append(question)
+    return jsonify({'result': result})
+
+
 @app.route('/api/student/commit/<kid>/<understand>', methods=['GET'])
 def student_commit(kid, understand):
     from common.entity import Knowledge
@@ -318,6 +435,38 @@ def student_commit(kid, understand):
             status = {'status': 0}
             result.append(status)
 
+    return jsonify({'result': result})
+
+
+@app.route('/api/student/commit/question/<qid>/<choose>', methods=['GET'])
+def student_commit_question(qid, choose):
+    from common.entity import Question
+    rows = db_session.query(Question).filter_by(id=qid).all()
+    result = []
+    for row in rows:
+        if choose == "1":
+            row.ans1_count = row.ans1_count+1
+            db_session.commit()
+            status = {'status': 1}
+            result.append(status)
+        elif choose == "2":
+            row.ans2_count = row.ans2_count+1
+            db_session.commit()
+            status = {'status': 1}
+            result.append(status)
+        elif choose == "3":
+            row.ans3_count = row.ans3_count+1
+            db_session.commit()
+            status = {'status': 1}
+            result.append(status)
+        elif choose == "4":
+            row.ans4_count = row.ans4_count+1
+            db_session.commit()
+            status = {'status': 1}
+            result.append(status)
+        else:
+            status = {'status': 0}
+            result.append(status)
     return jsonify({'result': result})
 
 

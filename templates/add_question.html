@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if session.logged_in %}
+    <h1>{{ lecture }}</h1>
+    <form action="{{ url_for('add_question') }}" method=post class=add-entry>
+      <dl>
+        <dt>Question:
+        <dt><input type=text size=30 name=question>
+          <dt>Choose 1:
+          <dt><input type="text" size="30" name="choose1">
+          <dt>Choose 2:
+          <dt><input type="text" size="30" name="choose2">
+          <dt>Choose 3:
+          <dt><input type="text" size="30" name="choose3">
+          <dt>Choose 4:
+          <dt><input type="text" size="30" name="choose4">
+        <dt><input type=submit value=Add>
+      </dl>
+    </form>
+  {% endif %}
+  <ul class=questions>
+  {% for question in questions %}
+      <li><h2>{{ question.qtext }}</h2>
+        <h4>{{ question.ans1 }} {{ question.ans1_count}}</h4>
+        <h4>{{ question.ans2 }} {{ question.ans2_count}}</h4>
+        <h4>{{ question.ans3 }} {{ question.ans3_count}}</h4>
+        <h4>{{ question.ans4 }} {{ question.ans4_count}}</h4>
+  {% else %}
+    <li><em>Unbelievable.  No question here so far</em>
+  {% endfor %}
+  </ul>
+{% endblock %}

@@ -42,3 +42,20 @@ class Knowledge(Base):
     yes_count = Column(BigInteger)
     no_count = Column(BigInteger)
     is_send = Column(Boolean)
+
+
+class Question(Base):
+
+    __tablename__ = 'question'
+    id = Column(BigInteger, primary_key=True)
+    body = Column(Text)
+    ans1 = Column(Text)
+    ans1_count = Column(BigInteger)
+    ans2 = Column(Text)
+    ans2_count = Column(BigInteger)
+    ans3 = Column(Text)
+    ans3_count = Column(BigInteger)
+    ans4 = Column(Text)
+    ans4_count = Column(BigInteger)
+    lid = Column(BigInteger)
+    is_send = Column(Boolean)
