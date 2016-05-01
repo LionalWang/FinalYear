@@ -21,10 +21,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="server.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="server.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="10.142069">
+            <state vertical-scroll-proportion="0.0">
               <caret line="424" column="0" selection-start-line="424" selection-start-column="0" selection-end-line="424" selection-end-column="0" />
               <folding>
                 <element signature="e#33#133#0" expanded="true" />
@@ -53,11 +53,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="show_lecture.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="show_lecture.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/show_lecture.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.178572">
-              <caret line="15" column="277" selection-start-line="15" selection-start-column="277" selection-end-line="15" selection-end-column="277" />
+            <state vertical-scroll-proportion="0.40889525">
+              <caret line="15" column="308" selection-start-line="15" selection-start-column="308" selection-end-line="15" selection-end-column="308" />
               <folding />
             </state>
           </provider>
@@ -802,11 +802,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/show_lecture.html">
+    <entry file="file://$PROJECT_DIR$/server.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.178572">
-          <caret line="15" column="277" selection-start-line="15" selection-start-column="277" selection-end-line="15" selection-end-column="277" />
-          <folding />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="424" column="0" selection-start-line="424" selection-start-column="0" selection-end-line="424" selection-end-column="0" />
+          <folding>
+            <element signature="e#33#133#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -818,13 +820,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server.py">
+    <entry file="file://$PROJECT_DIR$/templates/show_lecture.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="10.142069">
-          <caret line="424" column="0" selection-start-line="424" selection-start-column="0" selection-end-line="424" selection-end-column="0" />
-          <folding>
-            <element signature="e#33#133#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.40889525">
+          <caret line="15" column="308" selection-start-line="15" selection-start-column="308" selection-end-line="15" selection-end-column="308" />
+          <folding />
         </state>
       </provider>
     </entry>
