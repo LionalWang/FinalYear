@@ -116,7 +116,7 @@ def add_lecture():
         abort(401)
 
     from common.entity import Lecture
-    lecture = Lecture(tid=session['tid'], lecturename=request.form['lecturename'], time=request.form['time'])
+    lecture = Lecture(tid=session['tid'], lecturename=request.form['lecturename'])
     db_session.add(lecture)
     db_session.commit()
     flash('New entry was successfully posted')
